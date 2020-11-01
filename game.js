@@ -74,7 +74,7 @@ class Game{
 			console.log('IN END');
 			background(GRAY);
 			this.mapFinalYCoords();
-			this.finalHeight = this.currScreenChunk * this.originalCanvasHeight;
+			this.finalHeight = (this.currScreenChunk + 1) * this.originalCanvasHeight;
 			resizeCanvas(width, this.finalHeight);
 		}
 		for(let i = 0;i<this.currPoints.length;i++){
