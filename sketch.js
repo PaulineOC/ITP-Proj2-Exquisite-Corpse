@@ -6,7 +6,7 @@ let canvas;
 let mainTimer;
 function setup(){
   //createCanvas(windowWidth, windowHeight);
-  canvas = createCanvas(500, 400);
+  canvas = createCanvas(500, 200);
   //serial = new p5.SerialPort();
   // serialSetup(serial);
   game = new Game(height);

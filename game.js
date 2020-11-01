@@ -9,17 +9,16 @@ class Game{
 	originalCanvasHeight;
 	finalHeight;
 
-	allPoints = [];
 	currPoints = [];
+	currScreenChunkHeights = [0];
 
 	rounds;
-	roundTime = 7000;
+	roundTime = 2000;
 
 	constructor(height){
 		this.originalCanvasHeight = height;
 		this.rounds = 4;
 	}
-
 
 	drawIntro(){
 		// some intro instructions?
@@ -29,7 +28,10 @@ class Game{
 		if(this.gameState === gameStates.IN_PROGRESS){
 			this.isPlayer1=!this.isPlayer1;
 			this.rounds--;
-			if(this.rounds <= 0){
+			if(this.rounds > 0){
+				this.resetCanvas();
+			}
+			else{
 				this.prevGameState = gameStates.IN_PROGRESS;
 				this.gameState = gameStates.END;
 			}
@@ -43,11 +45,11 @@ class Game{
 		}
 		this.renderProperties();
 		ellipse(this.cursorX,this.cursorY, ELLIPSE_RADIUS,ELLIPSE_RADIUS);
-		this.outofBounds();
+		this.outOfBounds();
 		this.prevGameState = this.gameState;
 	}
 
-	outofBounds(){
+	outOfBounds(){
 		if(this.cursorX > width){
 			this.cursorX = width;
 		}
@@ -63,16 +65,16 @@ class Game{
 	}
 
 	resetCanvas(){
-		this.currScreenChunk++;
 		background(YELLOW);
+		this.currScreenChunkHeights.push(this.cursorY);
+		this.currScreenChunk++;
 		this.cursorY = 0;
-		console.log();
 	}
 
 	drawResults(){
 		if(this.prevGameState === gameStates.IN_PROGRESS && this.gameState === gameStates.END){
 			this.mapFinalYCoords();
-			this.finalHeight = (this.currScreenChunk + 1) * this.originalCanvasHeight;
+			this.finalHeight = this.calculateFinalScreenSize();
 			resizeCanvas(width, this.finalHeight);
 		}
 		background(GRAY);
@@ -87,11 +89,19 @@ class Game{
 	}
 
 	mapFinalYCoords(){
+		let currYHeight = 0;
 		for(let i=0;i<this.currPoints.length;i++){
-			if(this.currPoints[i]['screenChunk']>0){
-				this.currPoints[i]['y'] = this.currPoints[i]['y'] + (this.currPoints[i]['screenChunk'] * this.originalCanvasHeight);
+			// Check if we are on a new screen chunk
+			if(i > 0 && this.currPoints[i-1].screenChunk !== this.currPoints[i].screenChunk) {
+				// Increase the height to match the new screen chunk
+				currYHeight += this.currScreenChunkHeights[this.currPoints[i].screenChunk];
 			}
+			this.currPoints[i]['y'] = this.currPoints[i]['y'] + currYHeight;
 		}
+	}
+
+	calculateFinalScreenSize(){
+		return _.sum(this.currScreenChunkHeights) +  this.cursorY;
 	}
 
 	renderProperties(){
