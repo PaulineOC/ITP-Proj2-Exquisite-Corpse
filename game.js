@@ -29,10 +29,10 @@ class Game{
 		if(this.gameState === gameStates.IN_PROGRESS){
 			this.isPlayer1=!this.isPlayer1;
 			this.rounds--;
-			// if(this.rounds <= 0){
-			// 	this.prevGameState = gameStates.IN_PROGRESS;
-			// 	this.gameState = gameStates.END;
-			// }
+			if(this.rounds <= 0){
+				this.prevGameState = gameStates.IN_PROGRESS;
+				this.gameState = gameStates.END;
+			}
 		}
 		return;
 	}
@@ -71,19 +71,14 @@ class Game{
 
 	drawResults(){
 		if(this.prevGameState === gameStates.IN_PROGRESS && this.gameState === gameStates.END){
-			console.log('IN END');
-			background(GRAY);
 			this.mapFinalYCoords();
 			this.finalHeight = (this.currScreenChunk + 1) * this.originalCanvasHeight;
 			resizeCanvas(width, this.finalHeight);
 		}
+		background(GRAY);
 		for(let i = 0;i<this.currPoints.length;i++){
 			let currX =  this.currPoints[i]['x'];
 			let currY = this.currPoints[i]['y'];
-			// if(this.prevGameState === gameStates.IN_PROGRESS && this.gameState === gameStates.END){
-			// 	console.log('currX:', currX);
-			// 	console.log('currY:', currY);
-			// }
 			fill(PURPLE);
 			stroke(PURPLE);
 			ellipse(currX, currY, ELLIPSE_RADIUS);

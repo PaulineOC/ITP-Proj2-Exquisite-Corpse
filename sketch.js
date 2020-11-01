@@ -11,7 +11,7 @@ function setup(){
   // serialSetup(serial);
   game = new Game(height);
 
-  //mainTimer = setInterval(game.handleGameTimer.bind(game), game.roundTime);
+  mainTimer = setInterval(game.handleGameTimer.bind(game), game.roundTime);
   background(GRAY);
 }
 
@@ -25,7 +25,7 @@ function draw() {
       break;
     case gameStates.END:
       game.drawResults();
-      //clearInterval(mainTimer);
+      clearInterval(mainTimer);
   }
 }
 
