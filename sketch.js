@@ -12,7 +12,9 @@ function setup(){
   game = new Game(height);
   mainTimer = setInterval(game.handleGameTimer.bind(game), game.roundTime);
   background(GRAY);
-  
+
+  serial = new p5.SerialPort();
+  serialSetup(serial);
 }
 
 function draw() {
