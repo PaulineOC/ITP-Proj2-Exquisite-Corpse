@@ -6,13 +6,13 @@ let canvas;
 let mainTimer;
 function setup(){
   //createCanvas(windowWidth, windowHeight);
-  canvas = createCanvas(500, 200);
+  canvas = createCanvas(500, 300);
   //serial = new p5.SerialPort();
   // serialSetup(serial);
   game = new Game(height);
-
   mainTimer = setInterval(game.handleGameTimer.bind(game), game.roundTime);
   background(GRAY);
+  
 }
 
 function draw() {

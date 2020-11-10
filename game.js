@@ -13,7 +13,7 @@ class Game{
 	currScreenChunkHeights = [0];
 
 	rounds;
-	roundTime = 2000;
+	roundTime = 4000;
 
 	constructor(height){
 		this.originalCanvasHeight = height;
