@@ -11,15 +11,25 @@ function serialSetup(serial){
 
 function serialEvent() {
     var inString = serial.readStringUntil('\r\n');
-
-    //check to see that there's actually a string there:
     if (inString.length > 0 ) {
-        var allReadings = split(inString, ',');            // split the string on the commas
+        var allReadings = split(inString, ',');
 
         // Keep only the valid readings of format [x,y,buttonInput,playerToken]
         if(allReadings.length === 4 && (allReadings[3] === "P1" || allReadings[3] === "P2" )){
-            console.log('here are filtered sensor readings:', allReadings);
-            //TODO: handle different game states:
+            switch(game.gameState){
+                case gameStates.INTRO:
+                    if(allReadings[2]=== "1"){
+                        game.gameState = gameStates.IN_PROGRESS;
+                    }
+                    break;
+                case gameStates.END:
+                    if(allReadings[2]=== "1" && allReadings[3] === "P2" && !game.hasSavedPhoto){
+                        game.hasSavedPhoto = true;
+                        saveCanvas();
+                    }
+                    break;
+                case gameStates.IN_PROGRESS: game.handlePhysicalInput(allReadings); break;
+            }
         }
     }
 }

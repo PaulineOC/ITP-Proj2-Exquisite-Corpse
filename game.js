@@ -8,20 +8,27 @@ class Game{
 	currScreenChunk = 0;
 	originalCanvasHeight;
 	finalHeight;
+	hasSavedPhoto;
 
 	currPoints = [];
 	currScreenChunkHeights = [0];
 
 	rounds;
-	roundTime = 4000;
+	roundTime = 10000;
 
 	constructor(height){
 		this.originalCanvasHeight = height;
 		this.rounds = 4;
+		this.hasSavedPhoto = false;
 	}
 
 	drawIntro(){
-		// some intro instructions?
+		fill(WHITE);
+		textSize(36);
+		let w = textWidth('Exquisite Corpse')/2;
+		let w2 = textWidth('Press Button to Start')/2;
+		text('Exquisite Corpse', width/2-w, height/2);
+		text('Press Button to Start', width/2-w2, height/2+64);
 	}
 
 	handleGameTimer(){
@@ -116,6 +123,31 @@ class Game{
 		else{
 			fill(BLUE);
 			stroke(BLUE);
+		}
+	}
+
+
+	///p1 X: 403 L, 275 R
+
+	handlePhysicalInput(arduinoInput){
+		// [ x, y, buttonInput, playerToken]
+		let x = arduinoInput[0];
+		let y = arduinoInput[1];
+		let button = arduinoInput[2];
+		let player = arduinoInput[3];
+		console.log('handlePhysical Input:', arduinoInput);
+
+		if(game.isPlayer1 && player === "P1" && button === "1"){
+			game.cursorX -= map(x, 275, 400, -VELOCITY, VELOCITY);
+			game.cursorY += map(y, 275, 390, -VELOCITY, VELOCITY);
+			console.log("player 1");
+			game.currPoints.push({x: game.cursorX, y: game.cursorY, screenChunk: game.currScreenChunk, isPlayer1: game.isPlayer1});
+		}
+		if(!game.isPlayer1 && player === "P2" && button === "1"){
+			game.cursorX -= map(x, 275, 400, -VELOCITY, VELOCITY);
+			game.cursorY += map(y, 275, 390, -VELOCITY, VELOCITY);
+			console.log("player 2");
+			game.currPoints.push({x: game.cursorX, y: game.cursorY, screenChunk: game.currScreenChunk, isPlayer1: false});
 		}
 	}
 }
